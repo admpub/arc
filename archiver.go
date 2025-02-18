@@ -42,13 +42,11 @@ func Archive(dir, outfile string, compression archives.Compression, archival arc
 	logging("Removing any existing output file: %s", outfile)
 	if err := os.RemoveAll(outfile); err != nil {
 		errMsg := fmt.Errorf("failed to remove existing output file '%s': %w", outfile, err)
-		logging(errMsg.Error())
 		return errMsg
 	}
 
 	if !isExist(dir) {
 		errMsg := fmt.Errorf("directory '%s' does not exist, cannot proceed with archival", dir)
-		logging(errMsg.Error())
 		return errMsg
 	}
 
@@ -63,7 +61,6 @@ func Archive(dir, outfile string, compression archives.Compression, archival arc
 	})
 	if err != nil {
 		errMsg := fmt.Errorf("error mapping files from directory '%s': %w", dir, err)
-		logging(errMsg.Error())
 		return errMsg
 	}
 	logging("Successfully mapped files for directory: %s", dir)
@@ -73,7 +70,6 @@ func Archive(dir, outfile string, compression archives.Compression, archival arc
 	outf, err := os.Create(outfile)
 	if err != nil {
 		errMsg := fmt.Errorf("error creating output file '%s': %w", outfile, err)
-		logging(errMsg.Error())
 		return errMsg
 	}
 	defer func() {
@@ -93,7 +89,6 @@ func Archive(dir, outfile string, compression archives.Compression, archival arc
 	err = format.Archive(context.Background(), outf, files)
 	if err != nil {
 		errMsg := fmt.Errorf("error during archive creation for output file '%s': %w", outfile, err)
-		logging(errMsg.Error())
 		return errMsg
 	}
 	logging("Archive created successfully: %s", outfile)
