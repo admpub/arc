@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -76,7 +77,7 @@ func main() {
 			log.Fatalf("Unsupported archival type: %s", *archivalType)
 		}
 
-		err := arc.Archive(source, *archiveFile, compression, archival)
+		err := arc.Archive(context.Background(), source, *archiveFile, compression, archival)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -91,7 +92,7 @@ func main() {
 		}
 
 		// Automatically identify archive format during extraction
-		err := arc.Unarchive(*archiveFile, destination)
+		err := arc.Unarchive(context.Background(), *archiveFile, destination)
 		if err != nil {
 			log.Fatal(err)
 		}

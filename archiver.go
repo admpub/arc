@@ -35,7 +35,7 @@ func isExist(path string) bool {
 // outfile: the output file
 // compression: the compression to use (gzip, bzip2, etc.)
 // archival: the archival to use (tar, zip, etc.)
-func Archive(dir, outfile string, compression archives.Compression, archival archives.Archival) error {
+func Archive(ctx context.Context, dir, outfile string, compression archives.Compression, archival archives.Archival) error {
 	logging("Starting the archival process for directory: %s", dir)
 
 	// remove outfile
@@ -56,7 +56,7 @@ func Archive(dir, outfile string, compression archives.Compression, archival arc
 	if dir == "." {
 		archiveDirName = ""
 	}
-	files, err := archives.FilesFromDisk(context.Background(), nil, map[string]string{
+	files, err := archives.FilesFromDisk(ctx, nil, map[string]string{
 		dir: archiveDirName,
 	})
 	if err != nil {
@@ -86,7 +86,7 @@ func Archive(dir, outfile string, compression archives.Compression, archival arc
 
 	// create the archive
 	logging("Starting archive creation: %s", outfile)
-	err = format.Archive(context.Background(), outf, files)
+	err = format.Archive(ctx, outf, files)
 	if err != nil {
 		errMsg := fmt.Errorf("error during archive creation for output file '%s': %w", outfile, err)
 		return errMsg

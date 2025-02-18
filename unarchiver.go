@@ -119,7 +119,7 @@ func handleFile(f archives.FileInfo, dst string) error {
 }
 
 // Unarchive unarchives a tarball to a directory, symlinks and hardlinks are ignored.
-func Unarchive(tarball, dst string) error {
+func Unarchive(ctx context.Context, tarball, dst string) error {
 	logging("Unarchiving %s to %s", tarball, dst)
 	archiveFile, openErr := os.Open(tarball)
 	if openErr != nil {
@@ -127,7 +127,7 @@ func Unarchive(tarball, dst string) error {
 	}
 	defer archiveFile.Close()
 
-	format, input, identifyErr := archives.Identify(context.Background(), tarball, archiveFile)
+	format, input, identifyErr := archives.Identify(ctx, tarball, archiveFile)
 	if identifyErr != nil {
 		return fmt.Errorf("identify format: %w", identifyErr)
 	}
@@ -145,7 +145,7 @@ func Unarchive(tarball, dst string) error {
 		return handleFile(f, dst)
 	}
 
-	if extractErr := extractor.Extract(context.Background(), input, handler); extractErr != nil {
+	if extractErr := extractor.Extract(ctx, input, handler); extractErr != nil {
 		return fmt.Errorf("extracting files: %w", extractErr)
 	}
 
