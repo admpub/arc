@@ -18,6 +18,9 @@ var CompressionMap = map[string]archives.Compression{
 	"zst": archives.Zstd{},
 	"lz4": archives.Lz4{},
 	"br":  archives.Brotli{},
+	"lz":  archives.Lzip{},
+	"sz":  archives.Sz{},
+	"zz":  archives.Zlib{},
 }
 
 var ArchivalMap = map[string]archives.Archival{
